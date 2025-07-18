@@ -77,12 +77,23 @@ class LogoutView(View):
     logout(request)
     return redirect('login')
   
+
 class IndexView(View):
-  def get(self,request,*args,**kwargs):
-    if not request.user.is_authenticated:
-      return redirect('login')
-    return render(request,'index.html')
-  
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+
+        total_properties = Property.objects.exclude(status='draft').count()
+        total_users = CustomUser.objects.filter(is_superuser=False).count()
+        active_properties = Property.objects.filter(status='active').count()
+        inactive_properties = Property.objects.filter(status='inactive').count()
+
+        return render(request, 'index.html', {
+            'total_properties': total_properties,
+            'total_users': total_users,
+            'active_properties': active_properties,
+            'inactive_properties': inactive_properties,
+        })
 class UserListView(View):
   def get(self,request,*args,**kwargs):
     if not request.user.is_authenticated:
@@ -186,12 +197,6 @@ class BlogPublishView(PermissionRequiredMixin, View):
 
       
 
-
-# class BlogListView(View):
-#   def get(self,request,*args,**kwargs):
-#     blogs =Blog.objects.all()
-#     return render(request,'blog-list.html',{'blogs':blogs}) 
-  
 class BlogEditView(PermissionRequiredMixin, View):
     permission_required = 'realestate_app.change_blog'
     raise_exception = True
@@ -487,52 +492,54 @@ from django.views.decorators.csrf import csrf_exempt
 class AddPropertyView(View):
     def get(self, request):
         property_type_id = request.GET.get('property_type')
-        builders  = Builder.objects.all()
+        builders = Builder.objects.all()
         communities = Community.objects.all()
         infos = Information.objects.all()
-       
-        
         amenities = Amenity.objects.all()
         property_types = PropertyType.objects.filter(status='Active')
+
         return render(request, 'add_property.html', {
             'property': None,
             'amenities': amenities,
             'property_types': property_types,
             'selected_property_type': property_type_id,
-            'builders' :builders,
-            'communities':communities,
-            'infos':infos
+            'builders': builders,
+            'communities': communities,
+            'infos': infos
         })
 
     def post(self, request):
-        action = request.POST.get('action')
+        action = request.POST.get('action')  # 'draft' or 'save'
 
-        builder_id = request.POST.get('builder')
-        builder = Builder.objects.get(id=builder_id)
+        builder = Builder.objects.get(id=request.POST.get('builder'))
+        community = Community.objects.get(id=request.POST.get('community'))
+        info_obj = Information.objects.get(id=request.POST.get('property_info'))
 
-        community_id = request.POST.get('community')
-        community = Community.objects.get(id=community_id)
-
-        info_id = request.POST.get('property_info')
-        info_obj = Information.objects.get(id=info_id)
-
-
-        
+        # Set status based on action
         status = 'draft' if action == 'draft' else request.POST.get('status') or 'active'
         add_to_homepage = request.POST.get('addToHomepage') == 'Add To Home Page'
 
-        # ✅ FIXED: Use property_type_id instead of assigning FK instance
-        property_type_raw = request.POST.get('property_type')
+        # Parse property_type safely
         try:
-            property_type_id = int(property_type_raw) if property_type_raw else None
+            property_type_id = int(request.POST.get('property_type') or 0)
         except ValueError:
             property_type_id = None
 
+        # Check if images are uploaded
+        images = request.FILES.getlist('propertyImages[]')
+
+        # ✅ If saving and no image is provided — show error
+        if action == 'publish' and not images:
+
+            messages.error(request, "Please upload at least one property image before saving.")
+            return redirect('add_property')
+
+        # Create Property
         property_obj = Property.objects.create(
             property_name=request.POST.get('property_name'),
             property_address=request.POST.get('property_address'),
             property_description=request.POST.get('property_description'),
-            property_type_id=property_type_id,  # ✅ THIS IS THE CORRECT FIELD TO SET
+            property_type_id=property_type_id,
             price=request.POST.get('price') or 0,
             bedrooms=request.POST.get('bedrooms') or 0,
             bathrooms=request.POST.get('bathrooms') or 0,
@@ -542,14 +549,15 @@ class AddPropertyView(View):
             status=status,
             addToHomepage=add_to_homepage,
             displayOrder=request.POST.get('displayOrder') or None,
-            builder = builder,
+            builder=builder,
             community=community,
-            information = info_obj
-
+            information=info_obj
         )
 
+        # Save amenities as list
         property_obj.amenities = request.POST.getlist('amenities[]')
 
+        # Upload optional PDFs
         if 'floorplanPDF' in request.FILES:
             property_obj.floorplanPDF = request.FILES['floorplanPDF']
         if 'brochurePDF' in request.FILES:
@@ -557,14 +565,17 @@ class AddPropertyView(View):
 
         property_obj.save()
 
-        images = request.FILES.getlist('propertyImages[]')
-        for image in images:
-            PropertyImage.objects.create(property=property_obj, image=image)
-        
-        prop_imgs = PropertyImage.objects.all()
-        for p_img in prop_imgs:
-           PropertyGallery.objects.create(propertyimage=p_img,img=p_img.image)
+        # Upload images if provided
+        if images:
+            for image in images:
+                PropertyImage.objects.create(property=property_obj, image=image)
 
+            # ✅ Only use images related to this property
+            prop_imgs = PropertyImage.objects.filter(property=property_obj)
+            for p_img in prop_imgs:
+                PropertyGallery.objects.create(propertyimage=p_img, img=p_img.image)
+
+        # ✅ Redirect properly based on draft or publish
         return redirect('property-draft' if action == 'draft' else 'property-list')
 
 
@@ -629,7 +640,8 @@ class EditPropertyView(View):
 class PropertyListView(View):
     def get(self, request):
         properties = Property.objects.exclude(status='draft').prefetch_related('images').order_by('-id')
-        return render(request, 'property-list.html', {'properties': properties})
+        total_properties = properties.count() 
+        return render(request, 'property-list.html', {'properties': properties, 'total_properties': total_properties })
 
 
 class DraftPropertyListView(View):
