@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Property</title>
+  <link
+    rel="stylesheet"
+    href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}"
+  />
+</head>
+<body style="background-color: #ede8d0; padding: 20px;">
+  <div class="container">
+    <h2>Edit Property</h2>
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit" class="btn btn-success">Save Changes</button>
+      <a href="{% url 'property-list' %}" class="btn btn-secondary ml-2">Cancel</a>
+    </form>
+  </div>
+  <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

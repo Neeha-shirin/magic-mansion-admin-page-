@@ -1,0 +1,364 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="Magic Mansion Real Estate - Admin" />
+    <meta name="author" content="Magic Mansion Real Estate" />
+    <title>Magic Mansion Real Estate - Admin</title>
+    <link
+      rel="icon"
+       href="{% static 'assets/images/icons/brand-icon.png' %}"
+      type="image/x-icon"
+    />
+    <!-- Favicon-->
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/jquery-datatable/dataTables.bootstrap4.min.css' %}"
+    />
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}" />
+  </head>
+  <body style="background-color: #ede8d0">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+      <div class="loader">
+        <div class="m-t-30">
+          <img
+            class="zmdi-hc-spin"
+            src="{% static 'assets/images/icons/brand-icon.png' %}"
+            width="48"
+            height="48"
+            alt="Oreo"
+          />
+        </div>
+        <p>Please wait...</p>
+      </div>
+    </div>
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+
+    <!-- Top Bar -->
+    <nav class="navbar p-l-5 p-r-5">
+      <ul class="nav navbar-nav navbar-left">
+        <li>
+          <div class="navbar-header">
+            <a href="javascript:void(0);" class="bars"></a>
+          </div>
+        </li>
+
+        <li class="float-right">
+          <a href="sign-in.html" class="mega-menu" data-close="true"
+            ><i class="zmdi zmdi-power"></i
+          ></a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar">
+      <div class="tab-content">
+        <div class="tab-pane stretchRight active" id="dashboard">
+          <div class="menu">
+            <ul class="list">
+              <li>
+                <a class="navbar-brand" href="index.html"
+                  ><img
+                    src="{% static 'assets/images/logo/logo-full-white.png' %}"
+                    width="150"
+                    alt="logo"
+                /></a>
+              </li>
+
+              <li>
+                <a href="index.html"
+                  ><i class="zmdi zmdi-home"></i><span>Dashboard</span></a
+                >
+              </li>
+
+              <li>
+                <a href="users.html"
+                  ><i class="zmdi zmdi-accounts"></i><span>Users</span></a
+                >
+              </li>
+
+              <li>
+                <a href="javascript:void(0);" class="menu-toggle"
+                  ><i class="zmdi zmdi-comment-text"></i
+                  ><span>Attributes</span></a
+                >
+                <ul class="ml-menu">
+                  <li><a href="property-types.html">Property Type </a></li>
+                  <li><a href="community.html">Community / Area</a></li>
+                  <li><a href="amenities.html">Amenities</a></li>
+                  <li><a href="Builders.html">Builders </a></li>
+                </ul>
+              </li>
+              <li class="active open">
+                <a href="javascript:void(0);" class="menu-toggle"
+                  ><i class="zmdi zmdi-city"></i><span>Property</span></a
+                >
+                <ul class="ml-menu">
+                  <li class="active">
+                    <a href="property-list.html">Property List</a>
+                  </li>
+                  <li><a href="property-add.html">Add Property</a></li>
+                  <li><a href="property-draft.html">Property Drafts</a></li>
+                </ul>
+              </li>
+
+              <li>
+                <a href="javascript:void(0);" class="menu-toggle"
+                  ><i class="zmdi zmdi-blogger"></i><span>Blog</span></a
+                >
+                <ul class="ml-menu">
+                  <li><a href="blog-post.html">New Post</a></li>
+                  <li><a href="blog-list.html">Blog List</a></li>
+                  <li><a href="blog-drafts.html">Blog Drafts</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="javascript:void(0);" class="menu-toggle"
+                  ><i class="zmdi zmdi-collection-image"></i
+                  ><span>Image Gallery</span></a
+                >
+                <ul class="ml-menu">
+                  <li><a href="property-images.html">Propery Images</a></li>
+                  <li><a href="blog-images.html">Blog Images</a></li>
+                  <li>
+                    <a href="builders-logogallery.html">Buiilders Logos</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <section class="content">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-lg-5 col-md-5 col-sm-12">
+            <h2>Property List</h2>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row clearfix">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="body">
+                <div class="table-responsive">
+                  <table
+                    class="table td_2 table-striped table-hover js-basic-example dataTable"
+                  >
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Property Name</th>
+                        <th>Property Image</th>
+                        <th>Property Type</th>
+                        <th>Property Community</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                     <tbody>
+  {% for property in properties %}
+  <tr>
+    <td style="vertical-align: middle">{{ forloop.counter }}</td>
+    <td style="vertical-align: middle">{{ property.property_name }}</td>
+    <td style="vertical-align: middle">
+     {% with property.images.first as first_image %}
+    {% if first_image and first_image.image %}
+        <img src="{{ first_image.image.url }}" alt="Property Image" width="100" />
+    {% else %}
+        <span>No Image</span>
+    {% endif %}
+{% endwith %}
+
+
+
+    </td>
+     <td style="vertical-align: middle">
+     {{ property.property_type.name|default:"No Type" }}
+</td>
+
+    <td style="vertical-align: middle">{{ property.community }}</td>
+     <td class="status-cell"
+    onclick="toggleStatus({{ property.id }}, this)"
+    data-status="{{ property.status }}"
+    style="vertical-align: middle; font-weight: bold; cursor: pointer; color: {% if property.status == 'active' %}green{% else %}red{% endif %};">
+  {{ property.status|capfirst }}
+</td>
+
+    <td>
+  <div class="d-flex flex-column align-items-start" style="gap: 5px;">
+
+    <!-- Edit Button -->
+    <a href="{% url 'property-edit' property.id %}"
+       class="btn d-flex align-items-center justify-content-center btn-round"
+       style="background-color: darkblue; color: white;">
+      <i class="zmdi zmdi-edit mr-2" style="font-size: 14px;"></i> Edit
+    </a>
+
+    <!-- Delete Button Form -->
+<form action="{% url 'property-delete' property.id %}" method="post" style="display:inline;">
+  {% csrf_token %}
+  <button type="button"
+          class="btn btn-round"
+          style="background-color: darkred; color: white;"
+          onclick="confirmDelete(this, {{ property.id }})">
+    <i class="zmdi zmdi-delete mr-2"></i> Delete
+  </button>
+</form>
+
+
+
+  </div>
+</td>
+
+
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="7">No properties found.</td>
+  </tr>
+  {% endfor %}
+</tbody>
+
+</table>
+ </div>
+  </div>
+  </div>
+   </div>
+ </div>
+  </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
+     <script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
+
+     <script src="{% static 'assets/bundles/datatablescripts.bundle.js' %}"></script>
+
+   <script src="{% static 'assets/bundles/mainscripts.bundle.js' %}"></script>
+   <script src="{% static 'assets/js/pages/tables/jquery-datatable.js' %}"></script>
+
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+  
+   <!-- Insert this script at the bottom (before </body>) -->
+<script>
+  // Helper function to get CSRF token from cookies
+  
+
+  function toggleStatus(propertyId, cellElement) {
+  const csrftoken = document.querySelector('[name=csrf-token]').content;
+
+  fetch(`/property/${propertyId}/toggle-status/`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': csrftoken,
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not OK');
+      }
+      return response.json();
+    })
+    .then(data => {
+      const newStatus = data.new_status;
+      cellElement.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+      cellElement.dataset.status = newStatus;
+      cellElement.style.color = newStatus === 'active' ? 'green' : 'red';
+    })
+    .catch(error => {
+      console.error('Status toggle failed:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Failed to update status',
+        text: 'Something went wrong while toggling the status.',
+        confirmButtonColor: '#d33',
+      });
+    });
+}
+
+
+
+
+           
+  // Get CSRF token from cookie
+  
+  
+  function confirmDelete(button, propertyId) {
+    const form = button.closest('form');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    const row = button.closest('tr');
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You can delete the property or move it to drafts.",
+      icon: "warning",
+      showCancelButton: true,
+      showDenyButton: true,
+      confirmButtonText: "Delete",
+      denyButtonText: "Save to Draft",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#d33",
+      denyButtonColor: "#3085d6",
+      cancelButtonColor: "#6c757d",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Submit delete form
+        form.submit();
+      } else if (result.isDenied) {
+        // Move to Draft (JS route matches your Django URL: <int:pk>/draft/)
+        fetch(`/property/${propertyId}/draft/`, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json',
+          },
+        })
+          .then(response => {
+            if (response.ok) {
+              Swal.fire("Saved!", "Property moved to drafts.", "success").then(() => {
+                if (row) row.remove();  // remove the property row
+              });
+            } else {
+              Swal.fire("Error", "Could not move to draft.", "error");
+            }
+          })
+          .catch(error => {
+            Swal.fire("Error", "Something went wrong.", "error");
+          });
+      }
+    });
+  }
+
+
+</script>
+
+
+</body>
+</html>

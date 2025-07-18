@@ -1,0 +1,61 @@
+.menu > ul > li > ul.normal-sub > li a:hover,
+.menu > ul > li > ul > li > ul > li a:hover {
+  background-color: #7e6990;
+}
+sidebar-collapse .navbar-collapse:before {
+  background-color: #9b6fc1;
+}
+.btn-primary {
+  background: #aa8453;
+}
+.btn-primary:active,
+.btn-primary:hover,
+.btn-primary:focus {
+  background: black;
+}
+.btn-primary.btn-simple {
+  border-color: #9b6fc1;
+  color: #9b6fc1;
+  background: transparent;
+}
+.block-header h2 {
+  color: #fff;
+}
+.block-header h2 small {
+  color: #fff;
+}
+section.content:before {
+  background-color: #aa8453 ;
+}
+.navbar,
+.page-loader-wrapper {
+  background: #aa8453;
+}
+.bars {
+  color: #fff;
+}
+.sidebar .menu .list li.active {
+  background-color: transparent;
+}
+.sidebar .menu .list li.active > :first-child i,
+.sidebar .menu .list li.active > :first-child span {
+  color: #aa8453;
+}
+.sidebar .menu .list a:hover {
+  color: #aa8453;
+}
+.checkbox input[type="checkbox"]:checked + label::after {
+  border: 1px solid #aa8453;
+}
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-link:hover {
+  border: 1px solid #7e6990 !important;
+  background: #7e6990;
+  color: #fff;
+}
+.card .header h2:before {
+  background: #9b6fc1;
+}
+.card .header h2 strong {
+  color: #aa8453;
+}

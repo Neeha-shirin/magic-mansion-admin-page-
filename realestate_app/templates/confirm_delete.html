@@ -1,0 +1,25 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confirm Delete Property</title>
+  <link
+    rel="stylesheet"
+    href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}"
+  />
+</head>
+<body style="background-color: #ede8d0; padding: 20px;">
+  <div class="container">
+    <h2>Delete Property</h2>
+    <p>Are you sure you want to delete "<strong>{{ object.property_name }}</strong>"?</p>
+    <form method="post" class="mt-3">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, delete</button>
+      <a href="{% url 'property-list' %}" class="btn btn-secondary ml-2">Cancel</a>
+    </form>
+  </div>
+  <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

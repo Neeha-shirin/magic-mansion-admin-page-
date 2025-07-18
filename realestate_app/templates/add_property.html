@@ -1,0 +1,727 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="Magic Mansion Real Estate - Admin" />
+    <meta name="author" content="Magic Mansion Real Estate" />
+    <title>Magic Mansion Real Estate - Admin</title>
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      href="{% static 'assets/images/icons/brand-icon.png' %}"
+      type="image/x-icon"
+    />
+
+    <!-- Core CSS -->
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/dropzone/dropzone.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/bootstrap-select/css/bootstrap-select.css' %}"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}" />
+
+    <style>
+      .property-file-upload {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .property-upload-btn {
+        display: inline-block;
+        padding: 8px 8px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .property-file-upload input[type="file"] {
+        display: none;
+      }
+
+      .property-preview-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .property-preview-box {
+        position: relative;
+      }
+
+      .property-image-preview {
+        max-width: 160px;
+        max-height: 160px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+      }
+
+      .property-remove-btn {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        padding: 3px 8px;
+        background-color: #ff4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 12px;
+        line-height: 1;
+      }
+
+      .property-remove-btn:hover {
+        background-color: #cc0000;
+      }
+      .property-pdf-preview {
+        max-width: 200px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        position: relative;
+        font-size: 14px;
+        font-weight: 500;
+        word-wrap: break-word;
+      }
+
+      .property-preview-gallery canvas {
+        max-width: 160px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .property-preview-box {
+        position: relative;
+      }
+
+
+      
+    </style>
+  </head>
+
+    <body style="background-color: #ede8d0">
+  <!-- Page Loader -->
+  <div class="page-loader-wrapper">
+    <div class="loader">
+      <div class="m-t-30">
+        <img class="zmdi-hc-spin" src="{% static 'assets/images/icons/brand-icon.png' %}" width="48" height="48" alt="Oreo" />
+      </div>
+      <p>Please wait...</p>
+    </div>
+  </div>
+
+  <!-- Overlay For Sidebars -->
+  <div class="overlay"></div>
+
+  <!-- Top Bar -->
+  <nav class="navbar p-l-5 p-r-5">
+    <ul class="nav navbar-nav navbar-left">
+      <li>
+        <div class="navbar-header">
+          <a href="javascript:void(0);" class="bars"></a>
+        </div>
+      </li>
+      <li class="float-right">
+        <a href="sign-in.html" class="mega-menu" data-close="true">
+          <i class="zmdi zmdi-power"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Left Sidebar -->
+  <aside id="leftsidebar" class="sidebar">
+    <div class="tab-content">
+      <div class="tab-pane stretchRight active" id="dashboard">
+        <div class="menu">
+          <ul class="list">
+            <li>
+              <a class="navbar-brand" href="index.html">
+                <img src="{% static 'assets/images/logo/logo-full-white.png' %}" width="150" alt="logo" />
+              </a>
+            </li>
+            <li>
+              <a href="index.html">
+                <i class="zmdi zmdi-home"></i><span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="users.html">
+                <i class="zmdi zmdi-accounts"></i><span>Users</span>
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0);" class="menu-toggle">
+                <i class="zmdi zmdi-comment-text"></i><span>Attributes</span>
+              </a>
+              <ul class="ml-menu">
+                <li><a href="property-types.html">Property Type </a></li>
+                <li><a href="community.html">Community / Area</a></li>
+                <li><a href="amenities.html">Amenities</a></li>
+                <li><a href="Builders.html">Builders </a></li>
+              </ul>
+            </li>
+<li class="active open">
+  <a href="javascript:void(0);" class="menu-toggle">
+    <i class="zmdi zmdi-city"></i><span>Property</span>
+  </a>
+  <ul class="ml-menu">
+    <li><a href="{% url 'property-list' %}">Property List</a></li>
+    <li><a href="{% url 'add_property' %}">Add Property</a></li>
+    <li><a href="{% url 'property-draft' %}">Property Drafts</a></li>
+  </ul>
+</li>
+
+            <li>
+              <a href="javascript:void(0);" class="menu-toggle">
+                <i class="zmdi zmdi-blogger"></i><span>Blog</span>
+              </a>
+              <ul class="ml-menu">
+                <li><a href="blog-post.html">New Post</a></li>
+                <li><a href="blog-list.html">Blog List</a></li>
+                <li><a href="blog-drafts.html">Blog Drafts</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="javascript:void(0);" class="menu-toggle">
+                <i class="zmdi zmdi-collection-image"></i><span>Image Gallery</span>
+              </a>
+              <ul class="ml-menu">
+                <li><a href="property-images.html">Propery Images</a></li>
+                <li><a href="blog-images.html">Blog Images</a></li>
+                <li><a href="builders-logogallery.html">Buiilders Logos</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="header">
+              <h2><strong>Add</strong> Property</h2>
+            </div>
+            <div class="body">
+              <form action="{% if property %}{% url 'property-edit' property.id %}{% else %}{% url 'add_property' %}{% endif %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Property Name -->
+                <div class="row clearfix">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="propertyName" class="sr-only">Property Name</label>
+                      <input type="text" id="propertyName" class="form-control" placeholder="Property Name" name="property_name" value="{{ property.property_name|default_if_none:'' }}" />
+                    </div>
+                  </div>
+
+                  <!-- Property Address -->
+                  <div class="col-sm-8">
+                    <div class="form-group">
+                      <label for="propertyAddress" class="sr-only">Property Address</label>
+                      <textarea id="propertyAddress" rows="4" class="form-control no-resize" placeholder="Property Address" name="property_address">{{ property.property_address|default_if_none:'' }}</textarea>
+                    </div>
+                  </div>
+
+                  <!-- Property Description -->
+                  <div class="col-sm-8">
+                    <div class="form-group">
+                      <label for="propertyDescription" class="sr-only">Property Description</label>
+                      <textarea id="propertyDescription" rows="4" class="form-control no-resize" placeholder="Property Description" name="property_description">{{ property.property_description|default_if_none:'' }}</textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Property Info -->
+                 <h6 class="mt-4">Property Information</h6>
+                <div class="row clearfix">
+                  <div class="col-sm-12  mb-5">
+                      {% for info in infos %}
+          <div class="radio inlineblock m-r-25">
+            <input type="radio" name="property_info" id="radio1{{ info.id }}" value="{{ info.id }}" />
+            <label for="radio1{{ info.id }}">{{ info.name }}</label>
+          </div>
+              {% endfor %}
+
+                    
+                  </div> 
+
+                  <!-- Price -->
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="price" class="sr-only">Price / Rent</label>
+                      <input type="text" id="price" class="form-control" placeholder="Price / Rent" name="price" value="{{ property.price|default_if_none:'' }}" />
+                    </div>
+                  </div>
+
+                  <!-- Bedrooms, Bathrooms, Sqft -->
+                  <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="form-group">
+                      <label for="bedrooms" class="sr-only">Number of Bedrooms</label>
+                      <input type="number" id="bedrooms" class="form-control" placeholder="Number of Bedrooms" name="bedrooms" value="{{ property.bedrooms|default_if_none:'' }}" />
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="form-group">
+                      <label for="bathrooms" class="sr-only">Number of Bathrooms</label>
+                      <input type="number" id="bathrooms" class="form-control" placeholder="Number of Bathrooms" name="bathrooms" value="{{ property.bathrooms|default_if_none:'' }}" />
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="form-group">
+                      <label for="min_sqft" class="sr-only">Min Square ft</label>
+                      <input type="text" id="min_sqft" class="form-control" placeholder="Min Square ft" name="min_sqft" value="{{ property.min_sqft|default_if_none:'' }}" />
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="form-group">
+                      <label for="max_sqft" class="sr-only">Max Square ft</label>
+                      <input type="text" id="max_sqft" class="form-control" placeholder="Max Square ft" name="max_sqft" value="{{ property.max_sqft|default_if_none:'' }}" />
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="location" class="sr-only">Property Location</label>
+                      <input type="text" id="location" class="form-control" placeholder="Property Location" name="location" value="{{ property.location|default_if_none:'' }}" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Remaining parts continue -->
+
+
+                                 <div class="row clearfix">
+               <div class="col-sm-6">
+                    <h6 class="mt-4">Property Communities / Area</h6>
+                    <select class="form-control show-tick" name="community" id="community">
+                      <option value="">-- Please select --</option>
+                      {% for community in communities %}
+                      <option value="{{community.id}}" >{{community.name}}</option>
+                      {% endfor %}
+                      
+                    </select>
+                  </div> 
+<div class="col-sm-6">
+  <h6 class="mt-4">Property Type</h6>
+  <select name="property_type" class="form-control" required>
+    <option value="">-- Please select --</option>
+    {% for pt in property_types %}
+      <option value="{{ pt.id }}"
+        {% if property and property.property_type_id == pt.id %}
+          selected
+        {% elif not property and selected_property_type == pt.id|stringformat:"s" %}
+          selected
+        {% endif %}
+      >{{ pt.name }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+<div class="col-sm-6">
+                      <h6 class="mt-4">Builder Information</h6>
+                      <select class="form-control show-tick" name="builder" >
+                        <option value="">-- Please select --</option>
+                        {% for builder in builders %}
+                        <option value="{{builder.id}}">{{builder.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+
+                </div>
+
+                <h6 class="mt-4">General Amenities</h6>
+<div class="row">
+  <div class="col-sm-12">
+    {% for amenity in amenities %}
+      {% if amenity.status == 'Active' %}
+        <div class="checkbox inlineblock m-r-20">
+          <input
+            id="amenity{{ amenity.id }}"
+            type="checkbox"
+            name="amenities[]"
+            value="{{ amenity.name }}"
+            {% if property and amenity.name in property.amenities %}checked{% endif %}
+          />
+          <label for="amenity{{ amenity.id }}">{{ amenity.name }}</label>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+
+                <div class="row clearfix mb-5">
+                <div class="col-sm-6">
+                   <div class="form-group">
+                         <h6 class="mt-4">Property Status</h6>
+                            <select name="status" id="status" class="form-control">
+                                        <option value="active" {% if property and property.status == 'active' %}selected{% endif %}>Active</option>
+                                     <option value="inactive" {% if property and property.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                                      <option value="draft" {% if property and property.status == 'draft' %}selected{% endif %}>Draft</option>
+                            </select>
+                 </div>
+                </div>
+
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-sm-6">
+                    <h6 class="mb-4">Customize Home Page Display</h6>
+                    <div class="checkbox inlineblock m-r-20">
+                      <input
+                        id="addToHomepage"
+                        type="checkbox"
+                        name="addToHomepage"
+                        value="Add To Home Page"
+                        {% if property.addToHomepage %}checked{% endif %}
+                      />
+                      <label for="addToHomepage">Add To Home Page</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-5">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="displayOrder" class="sr-only">Display Order</label>
+                      <input
+                        type="number"
+                        id="displayOrder"
+                        class="form-control"
+                        placeholder="Enter display order (e.g. 1)"
+                        name="displayOrder"
+                        value="{{ property.displayOrder|default_if_none:'' }}"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Upload Property Images -->
+                   <!-- Property Images Upload -->
+<!-- Upload Property Images -->
+<div class="row">
+  <div class="col-sm-6 mb-4">
+   <div class="property-file-upload">
+     <label for="propertyImages" class="property-upload-btn">Upload Property Images (Max 6)</label>
+    <input
+      id="propertyImages"
+      name="propertyImages[]"
+      type="file"
+      accept="image/*"
+      multiple
+      class="property-upload-input"
+    />
+   </div>
+  </div>
+</div>
+
+<!-- Image Preview -->
+<div class="row mb-4">
+  <div class="col-sm-12">
+    <div id="propertyPreviewGallery" class="d-flex flex-wrap gap-3">
+      <!-- Existing Images (Edit Mode) -->
+      {% if property and property.images.all %}
+        {% for image in property.images.all %}
+          <div class="property-preview-box">
+            <img src="{{ image.image.url }}" class="property-image-preview" />
+           
+         
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Floorplan PDF Upload -->
+<div class="row mb-4">
+  <div class="col-sm-6">
+    <div class="property-file-upload">
+      <label for="floorplanPDF" class="property-upload-btn">Upload Floorplan (PDF Only)</label>
+      <input id="floorplanPDF" name="floorplanPDF" type="file" accept="application/pdf" class="property-upload-input" />
+
+      {% if property.floorplanPDF %}
+        <div class="mt-3">
+          <a href="{{ property.floorplanPDF.url }}" target="_blank" class="btn btn-sm btn-secondary">
+            View Existing Floorplan
+          </a>
+        </div>
+      {% endif %}
+
+      
+      <div class="property-preview-gallery mt-3" id="floorplanPreview"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Brochure PDF Upload -->
+<div class="row">
+  <div class="col-sm-6 mb-4">
+    <div class="property-file-upload">
+      <label for="brochurePDF" class="property-upload-btn">Upload Brochure (PDF Only)</label>
+    <input id="brochurePDF" name="brochurePDF" type="file" accept="application/pdf" />
+
+    {% if property.brochurePDF %}
+      <div class="mt-3">
+        <a href="{{ property.brochurePDF.url }}" target="_blank" class="btn btn-sm btn-secndary">
+          View Existing Brochure
+        </a>
+      </div>
+    {% endif %}
+
+     <!-- Brochure Preview -->
+                      <div
+                        class="property-preview-gallery mt-3"
+                        id="brochurePreview"
+                      ></div>
+    </div>
+  </div>
+</div>
+
+                   <!-- Submit Buttons -->
+<div class="form-group mt-4">
+  {% if property and property.id %}
+    <button type="submit" class="btn btn-primary btn-round">Update</button>
+  {% else %}
+    <button type="submit" name="action" value="publish" class="btn btn-primary btn-round">
+      Save & Publish
+    </button>
+    <button type="submit" name="action" value="draft" class="btn btn-secondary btn-round">
+      Save as Draft
+    </button>
+  {% endif %}
+</div>
+
+
+
+             </form>
+            </div> <!-- body -->
+          </div> <!-- card -->
+        </div> <!-- col -->
+      </div> <!-- row -->
+    </div> <!-- container -->
+  </section>
+
+
+    <!-- Jquery Core Js -->
+      <script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
+       <script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
+
+       <!-- Dropzone Plugin Js -->
+        <script src="{% static 'assets/plugins/dropzone/dropzone.js' %}"></script>
+
+       <script src="{% static 'assets/bundles/mainscripts.bundle.js' %}"></script>
+
+        <!-- External CDNs -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+       
+
+      
+   <script>
+  document.getElementById("propertyImages").addEventListener("change", function (e) {
+    const files = e.target.files;
+    const previewGallery = document.getElementById("propertyPreviewGallery");
+
+    const existingPreviews = previewGallery.querySelectorAll(".property-preview-box").length;
+    if (existingPreviews + files.length > 6) {
+      Swal.fire({
+        icon: "warning",
+        title: "Image Limit Reached",
+        text: "You can only upload a maximum of 6 images.",
+        confirmButtonColor: "#3085d6",
+      });
+      return;
+    }
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+
+      reader.onload = function (event) {
+        const previewBox = document.createElement("div");
+        previewBox.classList.add("property-preview-box");
+
+        const img = document.createElement("img");
+        img.src = event.target.result;
+        img.classList.add("property-image-preview");
+
+        const removeBtn = document.createElement("button");
+        removeBtn.classList.add("property-remove-btn");
+        removeBtn.innerHTML = "&times;";
+
+        removeBtn.addEventListener("click", function () {
+          previewBox.remove();
+          if (previewGallery.children.length === 0) {
+            document.getElementById("propertyImages").value = "";
+          }
+        });
+
+        previewBox.appendChild(img);
+        previewBox.appendChild(removeBtn);
+        previewGallery.appendChild(previewBox);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+<script>
+  document.getElementById("floorplanPDF").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    const previewContainer = document.getElementById("floorplanPreview");
+
+    if (file) {
+      if (file.type !== "application/pdf") {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid File Type",
+          text: "Please select a PDF file only.",
+          confirmButtonColor: "#d33",
+        });
+        e.target.value = "";
+        return;
+      }
+
+      previewContainer.innerHTML = "";
+
+      const fileReader = new FileReader();
+      fileReader.onload = function () {
+        const typedarray = new Uint8Array(this.result);
+
+        pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
+          pdf.getPage(1).then(function (page) {
+            const viewport = page.getViewport({ scale: 1 });
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            const renderContext = {
+              canvasContext: context,
+              viewport: viewport,
+            };
+
+            page.render(renderContext).promise.then(function () {
+              const box = document.createElement("div");
+              box.classList.add("property-preview-box");
+
+              const removeBtn = document.createElement("button");
+              removeBtn.innerHTML = "&times;";
+              removeBtn.classList.add("property-remove-btn");
+              removeBtn.onclick = function () {
+                box.remove();
+                document.getElementById("floorplanPDF").value = "";
+              };
+
+              box.appendChild(removeBtn);
+              box.appendChild(canvas);
+              previewContainer.appendChild(box);
+            });
+          });
+        });
+      };
+
+      fileReader.readAsArrayBuffer(file);
+    }
+  });
+</script>
+
+<script>
+  document.getElementById("brochurePDF").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    const previewContainer = document.getElementById("brochurePreview");
+
+    if (file) {
+      if (file.type !== "application/pdf") {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid File Type",
+          text: "Please select a PDF file only.",
+          confirmButtonColor: "#d33",
+        });
+        e.target.value = "";
+        return;
+      }
+
+      previewContainer.innerHTML = "";
+
+      const fileReader = new FileReader();
+      fileReader.onload = function () {
+        const typedarray = new Uint8Array(this.result);
+
+        pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
+          pdf.getPage(1).then(function (page) {
+            const viewport = page.getViewport({ scale: 1 });
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            const renderContext = {
+              canvasContext: context,
+              viewport: viewport,
+            };
+
+            page.render(renderContext).promise.then(function () {
+              const box = document.createElement("div");
+              box.classList.add("property-preview-box");
+
+              const removeBtn = document.createElement("button");
+              removeBtn.innerHTML = "&times;";
+              removeBtn.classList.add("property-remove-btn");
+              removeBtn.onclick = function () {
+                box.remove();
+                document.getElementById("brochurePDF").value = "";
+              };
+
+              box.appendChild(removeBtn);
+              box.appendChild(canvas);
+              previewContainer.appendChild(box);
+            });
+          });
+        });
+      };
+
+      fileReader.readAsArrayBuffer(file);
+    }
+  });
+</script>
+
+ </body>
+</html>
